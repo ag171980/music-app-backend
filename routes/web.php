@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+header('Content-Security-Policy: upgrade-insecure-requests');
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,12 +20,9 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/usuarios', function(){
-    return "Solo usuarios";
-});
 
 //Usuarios
-// Route::get('/usuarios', "App\Http\Controllers\MysqlController@obtenerUsuarios");
+Route::get('/usuarios', "App\Http\Controllers\MysqlController@obtenerUsuarios");
 // Route::get('usuarios', "App\Http\Controllers\MysqlController@obtenerUsuarios");
 Route::get('/usuarios/{id}', "App\Http\Controllers\MysqlController@obtenerUsuariosPorId");
 
