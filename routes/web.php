@@ -25,6 +25,7 @@ Route::get('/', function () {
 
 //Usuarios
 Route::get('/usuarios', "App\Http\Controllers\MysqlController@obtenerUsuarios");
+Route::get('usuarios', "App\Http\Controllers\MysqlController@obtenerUsuarios");
 Route::get('/usuarios/{id}', "App\Http\Controllers\MysqlController@obtenerUsuariosPorId");
 
 Route::post('/usuarios/createAccount', "App\Http\Controllers\MysqlController@createAccount");
