@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\playlists;
 use \DB;
+use Illuminate\Support\Facades\Storage;
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
@@ -25,23 +26,38 @@ class PlaylistsController extends Controller
     }
     public function createPlaylist()
     {
+        //Funcion: Deberia tomar los datos desde el front y subirlos a la BD.
+        //Por otro lado deberia subir la imagen a la nube de AWS s3
+
+
+
+        //in AWS S3
         $responseArr = ["msg" => ""];
+        try {
+            //Primero subimos a BD
+            $imagen = $_FILES['file']['name'];
+            // $imagen_temporal = $_FILES['file']['tmp_name'];
+            $fecha = new \DateTime();
+            // $imagen = $fecha->getTimestamp() . "_" . $imagen;
+            //local
+            $imagen = $fecha->getTimestamp() . "_" . $imagen;
+            // move_uploaded_file($imagen_temporal, "E:/xampp/htdocs/music-app/src/assets/thumbnail_playlists/" . $imagen);
+            // $playlists['id_user_creator'] = $_POST['idUser'];
+            // $playlists['thumbnail_playlist'] = $imagen_temporal;
+            // $playlists['nombre_playlist'] = $_POST['name'];
+            // $playlists['descripcion_playlist'] = $_POST['description'];
+            // $insertPlaylist = DB::table('playlists')->insert($playlists);
+
+            //Luego subimos a Nube en AWS
+            $carpeta = "imagenes/thumbnail_playlists/";
+            $image_path = Storage::disk('s3')->put($carpeta, $imagen);
+            //datos para la BD
 
 
-        $fecha = new \DateTime();
-        $imagen = $_FILES['file']['name'];
-        $imagen_temporal = $_FILES['file']['tmp_name'];
-        $imagen = $fecha->getTimestamp() . "_" . $imagen;
-        // move_uploaded_file($imagen_temporal, "E:/xampp/htdocs/music-app/src/assets/thumbnail_playlists/" . $imagen);
-        move_uploaded_file($imagen_temporal, "/home/ubuntu/music-app/src/assets/thumbnail_playlists/" . $imagen);
-
-        $playlists['id_user_creator'] = $_POST['idUser'];
-        $playlists['thumbnail_playlist'] = $imagen;
-        $playlists['nombre_playlist'] = $_POST['name'];
-        $playlists['descripcion_playlist'] = $_POST['description'];
-
-        $insertPlaylist = DB::table('playlists')->insert($playlists);
-        $responseArr['msg'] = "Playlist creada correctamente.";
+            $responseArr['msg'] = "Playlist creada correctamente.";
+        } catch (\Exception $e) {
+            $responseArr['msg'] = "Error al crear la playlist.";
+        }
         return json_encode($responseArr);
     }
     public function getPlaylistForId($id)
@@ -82,4 +98,4 @@ class PlaylistsController extends Controller
         return json_encode($responseArr);
         // return json_encode($data);
     }
-}
+};
