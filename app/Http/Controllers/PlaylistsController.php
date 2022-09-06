@@ -24,8 +24,11 @@ class PlaylistsController extends Controller
     {
         return DB::table('playlists')->select()->where('id_user_creator', $id)->get();
     }
-    public function createPlaylist()
+    public function createPlaylist(Request $request)
     {
+	$request->validate([
+		'file'=>'required|image|max:1024'
+	]);
         //Funcion: Deberia tomar los datos desde el front y subirlos a la BD.
         //Por otro lado deberia subir la imagen a la nube de AWS s3
 
@@ -36,7 +39,7 @@ class PlaylistsController extends Controller
         try {
             //Primero subimos a BD
             $imagen = $_FILES['file']['name'];
-            // $imagen_temporal = $_FILES['file']['tmp_name'];
+            $imagen_temporal = $_FILES['file']['tmp_name'];
             $fecha = new \DateTime();
             // $imagen = $fecha->getTimestamp() . "_" . $imagen;
             //local
@@ -49,9 +52,11 @@ class PlaylistsController extends Controller
             // $insertPlaylist = DB::table('playlists')->insert($playlists);
 
             //Luego subimos a Nube en AWS
-            $carpeta = "imagenes/thumbnail_playlists/";
-            $image_path = Storage::disk('s3')->put($carpeta, $imagen);
-            //datos para la BD
+            $folder = "thumbnails";
+            //$image_path = Storage::disk('s3')->put($carpeta, $imagen);
+	    $asd = $_FILES;
+$image_path = Storage::disk('s3')->put($folder,$request->file ,'public');
+//datos para la BD
 
 
             $responseArr['msg'] = "Playlist creada correctamente.";
