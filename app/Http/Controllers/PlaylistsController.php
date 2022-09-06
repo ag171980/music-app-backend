@@ -32,7 +32,8 @@ class PlaylistsController extends Controller
         $imagen = $_FILES['file']['name'];
         $imagen_temporal = $_FILES['file']['tmp_name'];
         $imagen = $fecha->getTimestamp() . "_" . $imagen;
-        move_uploaded_file($imagen_temporal, "E:/xampp/htdocs/music-app/src/assets/thumbnail_playlists/" . $imagen);
+        // move_uploaded_file($imagen_temporal, "E:/xampp/htdocs/music-app/src/assets/thumbnail_playlists/" . $imagen);
+        move_uploaded_file($imagen_temporal, "/home/ubuntu/music-app/src/assets/thumbnail_playlists/" . $imagen);
 
         $playlists['id_user_creator'] = $_POST['idUser'];
         $playlists['thumbnail_playlist'] = $imagen;
@@ -77,7 +78,7 @@ class PlaylistsController extends Controller
 
         $insertarCancion = DB::table('playlist')->insert($playlist);
         $responseArr['msg'] = "Cancion agregada correctamente.";
-        
+
         return json_encode($responseArr);
         // return json_encode($data);
     }
