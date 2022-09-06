@@ -1,24 +1,4 @@
-#<IfModule authz_core_module>
-# RewriteEngine on
-# RewriteCond %{REQUEST_URI} !^public
-# RewriteRule ^(.*)$ public/$1 [L]
-#Require all denied
-#</IfModule>
-#<IfModule !authz_core_module>
-#Deny from all
-#</IfModule>
 
-#Options +FollowSymLinks
-#RewriteEngine On
-
-#RewriteCond %{REQUEST_FILENAME} !-d
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteRule ^ index.php [L]
-#<VirtualHost *:80>
-#RewriteEngine On
-#RewriteCond %{HTTP:X-Forwarded-Proto} =http
-#RewriteRule .* https://%{HTTP:Host}%{REQUEST_URI} [L,R=permanent]
-#</VirtualHost>
 
 
 RewriteEngine On
