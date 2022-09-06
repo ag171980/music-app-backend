@@ -26,9 +26,9 @@ class PlaylistsController extends Controller
     }
     public function createPlaylist(Request $request)
     {
-	$request->validate([
-		'file'=>'required|image|max:1024'
-	]);
+        $request->validate([
+            'file' => 'required|image|max:1024'
+        ]);
         //Funcion: Deberia tomar los datos desde el front y subirlos a la BD.
         //Por otro lado deberia subir la imagen a la nube de AWS s3
 
@@ -37,26 +37,23 @@ class PlaylistsController extends Controller
         //in AWS S3
         $responseArr = ["msg" => ""];
         try {
-            //Primero subimos a BD
-            $imagen = $_FILES['file']['name'];
-            $imagen_temporal = $_FILES['file']['tmp_name'];
-            $fecha = new \DateTime();
-            // $imagen = $fecha->getTimestamp() . "_" . $imagen;
             //local
-            $imagen = $fecha->getTimestamp() . "_" . $imagen;
+            // $imagen = $fecha->getTimestamp() . "_" . $imagen;
+            // $imagen = $_FILES['file']['name'];
+            // $imagen_temporal = $_FILES['file']['tmp_name'];
+            // $fecha = new \DateTime();
             // move_uploaded_file($imagen_temporal, "E:/xampp/htdocs/music-app/src/assets/thumbnail_playlists/" . $imagen);
-            // $playlists['id_user_creator'] = $_POST['idUser'];
-            // $playlists['thumbnail_playlist'] = $imagen_temporal;
-            // $playlists['nombre_playlist'] = $_POST['name'];
-            // $playlists['descripcion_playlist'] = $_POST['description'];
-            // $insertPlaylist = DB::table('playlists')->insert($playlists);
-
-            //Luego subimos a Nube en AWS
+            //in AWS
             $folder = "thumbnails";
             //$image_path = Storage::disk('s3')->put($carpeta, $imagen);
-	    $asd = $_FILES;
-$image_path = Storage::disk('s3')->put($folder,$request->file ,'public');
-//datos para la BD
+            $image_path = Storage::disk('s3')->put($folder, $request->file, 'public');
+            //datos para la BD
+            $playlists['id_user_creator'] = $_POST['idUser'];
+            $playlists['thumbnail_playlist'] = $request->file;
+            $playlists['nombre_playlist'] = $_POST['name'];
+            $playlists['descripcion_playlist'] = $_POST['description'];
+
+            $insertPlaylist = DB::table('playlists')->insert($playlists);
 
 
             $responseArr['msg'] = "Playlist creada correctamente.";
